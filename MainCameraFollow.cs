@@ -57,6 +57,8 @@ public class MainCameraFollow : MonoBehaviour {
         float angleVector = Vector3.Angle(pForward, cameraForward);
         float distanceVector = (playerObj.transform.position - this.transform.position).magnitude;
 
+
+        // Playerの向きとCamera -> Playerのベクトル角度差によってカメラの追従速度を変更
         if(angleVector < 90f)
         {
             cameraFollowSpeed = 8f;
@@ -66,8 +68,10 @@ public class MainCameraFollow : MonoBehaviour {
             cameraFollowSpeed = 4f;
         }
 
+        // Lock中にPlayerのY位置がTargetより高いときTargetPosのYの高さを補正
         if (target != null && playerObj.transform.position.y - target.transform.position.y > 0)
         {
+            // 差が12以下とそうでないかでケース分け
             if (playerObj.transform.position.y - target.transform.position.y < 12)
             {
                 targetPos += new Vector3(0, Mathf.Clamp(playerObj.transform.position.y - target.transform.position.y, 0, 12), 0);
@@ -77,11 +81,13 @@ public class MainCameraFollow : MonoBehaviour {
                 targetPos += new Vector3(0, Mathf.Clamp(playerObj.transform.position.y - target.transform.position.y, 22, 30) * 0.6f, 0);
             }
         }
+        // これいらないのでは？要検証
         else
         {
             cameraFollowSpeed = 4f;
         }
 
+        // Playerの向きとCamera -> Playerのベクトル角度差によってカメラの追従速度を変更(より細かく)
         if (angleVector < 57f)
         {
             this.transform.position = Vector3.Lerp(nowPos, targetPos, cameraFollowSpeed * 4 * Time.deltaTime);
@@ -90,8 +96,6 @@ public class MainCameraFollow : MonoBehaviour {
         {
             this.transform.position = Vector3.Lerp(nowPos, targetPos, cameraFollowSpeed * 3 * Time.deltaTime);
             //this.transform.position = Vector3.Lerp(nowPos, targetPos, cameraFollowSpeed * Time.deltaTime);
-            //this.transform.position = Vector3.Lerp(this.transform.position, targetPos, cameraFollowSpeed * Time.deltaTime);
-            //this.transform.position = Vector3.Lerp(this.transform.position, targetPos, cameraFollowSpeed * Time.deltaTime);
         }
         else
         {
@@ -102,40 +106,20 @@ public class MainCameraFollow : MonoBehaviour {
         Vector3 thisPos = this.transform.position;
         Vector3 lookTargetPos = cameraLookTargetObj.transform.position;
         Vector3 lookVector = lookTargetPos - thisPos;
-        
-        if (target)
+
+        // Camera -> TargetのベクトルをlookVectorに足すことで、よりTarget方向へ向ける
+        if (target != null)
         {
             //Vector3 crVec = (target.transform.position - thisPos);
             Vector3 crVec = new Vector3((target.transform.position.x - thisPos.x), target.transform.position.y - thisPos.y, target.transform.position.z - thisPos.z);
             lookVector = crVec * 0.8f + lookVector;
         }
 
+        // rotationをLerpで更新
         Quaternion thisRotate = this.transform.rotation;
         Quaternion newRotate = Quaternion.LookRotation(lookVector);
         this.transform.rotation = Quaternion.Lerp(thisRotate, newRotate, rotateSpeed * Time.deltaTime);
 
 	}
-    /*
-    private void FixedUpdate()
-    {
-        Vector3 nowPos = this.transform.position;
-        Vector3 targetPos = cameraPositionTargetObj.transform.position;
 
-        Vector3 pForward = playerObj.transform.forward;
-        Vector3 cameraForward = cameraLookTargetObj.transform.position - playerObj.transform.position;
-        float angleVector = Vector3.Angle(pForward, cameraForward);
-        Vector3 distanceVector = cameraPositionTargetObj.transform.position - this.transform.position;
-
-
-        if (angleVector < 60f)
-        {
-            this.transform.position = Vector3.Slerp(nowPos, targetPos, cameraFollowSpeed * 3 * Time.deltaTime);
-            //this.transform.position = Vector3.Lerp(this.transform.position, targetPos, cameraFollowSpeed * Time.deltaTime);
-        }
-        else
-        {
-            this.transform.position = Vector3.Lerp(nowPos, targetPos, cameraFollowSpeed * Time.deltaTime);
-        }
-    }
-    */
 }
