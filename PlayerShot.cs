@@ -23,7 +23,22 @@ public class PlayerShot : MonoBehaviour {
             if (tgt != null)
                 shotPrefab.transform.forward = (tgt.transform.position - shotPrefab.transform.position).normalized;
             else
-                shotPrefab.transform.forward = (mainAimObj.transform.position - shotPrefab.transform.position).normalized;
+            {
+                Ray ray = new Ray(Camera.main.transform.position, (mainAimObj.transform.position - Camera.main.transform.position));
+                RaycastHit hit;
+                if(Physics.Raycast(ray, out hit, 1000f))
+                {
+                    shotPrefab.transform.forward = (hit.point - shotPrefab.transform.position).normalized;
+                }
+                else
+                {
+                    Vector3 noHitpoint = (mainAimObj.transform.position - Camera.main.transform.position).normalized * 2000;
+                    //noHitpoint = mainAimObj.transform.position;
+                    shotPrefab.transform.forward = (noHitpoint - shotPrefab.transform.position).normalized;
+                }
+                //shotPrefab.transform.forward = (mainAimObj.transform.position - Camera.main.transform.position + new Vector3(0, 0f, 0)).normalized;
+                //shotPrefab.transform.forward = (mainAimObj.transform.position - shotPrefab.transform.position).normalized;
+            }
         }
 	}
 }

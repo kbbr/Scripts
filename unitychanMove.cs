@@ -139,16 +139,12 @@ public class unitychanMove : MonoBehaviour {
         Vector3 newSpeedZ = moveSpeed.z * this.transform.TransformDirection(Vector3.forward);
         Vector3 newSpeedY = Vector3.zero;
 
-        dbgText.text = "";
-        //dbgText.text = "newSpeedX.x: " + newSpeedX.x + "\nnewSpeedX.y: " + newSpeedX.y + "\nnewSpeedX.z: " + newSpeedX.z + "\n\n";
-        //dbgText.text += "newSpeedZ.x: " + newSpeedZ.x + "\nnewSpeedZ.y: " + newSpeedZ.y + "\nnewSpeedZ.z: " + newSpeedZ.z + "\n\n";
-        dbgText.text += "jumpSpeed: " + jumpSpeed + "\n";
+        dbgTextDraw();
 
         if (Input.GetButton("Jump"))
         {
             if (controller.isGrounded)
             {
-                dbgText.text += "jump";
                 isJump = true;
                 //newSpeedY = jumpSpeed * this.transform.TransformDirection(Vector3.up);
             }
@@ -227,7 +223,16 @@ public class unitychanMove : MonoBehaviour {
         //this.transform.localPosition += newSpeed * Time.deltaTime;
         //rb.AddForce(moveSpeed * 100 * Time.deltaTime);
 	}
-    
-    
+
+    void dbgTextDraw()
+    {
+        dbgText.text = "Pos[ " + this.transform.position + " ]\n";
+        dbgText.text += "ViewPos[ " + RectTransformUtility.WorldToScreenPoint(Camera.main, this.transform.position) + " ]\n";
+        dbgText.text += "angle[ " + this.transform.eulerAngles + " ]\n";
+        AimRotate aimRotate;
+        aimRotate = GameObject.Find("AimRotateOrigin").GetComponent<AimRotate>();
+        if(aimRotate.target != null)
+            dbgText.text += "dis[ " + (aimRotate.target.transform.position - this.transform.position).sqrMagnitude + "]\n";
+    }
 
 }

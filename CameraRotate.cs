@@ -43,7 +43,7 @@ public class CameraRotate : MonoBehaviour {
             }
         }
 
-
+        ///*
         float mouseY = Input.GetAxis("Mouse Y") * sensitivityX; ;
         mouseY *= reverseX ? -1 : 1;
         Vector3 nowRot = this.transform.eulerAngles;
@@ -58,5 +58,6 @@ public class CameraRotate : MonoBehaviour {
             newX = Mathf.Clamp(newX, -clampAngle, clampAngle);
         }
         this.transform.eulerAngles = new Vector3(newX, playerFollowTargetObj.transform.eulerAngles.y, 0);
+        //*/
 	}
 }

@@ -14,6 +14,7 @@ public class MainAimScreen : MonoBehaviour {
     public float clampAngle = 60f;
 
     public GameObject target = null;
+    private GameObject playerObj;
     Vector3 defaultMainAimPos;
     Quaternion defaultMainAimRot;
 
@@ -22,6 +23,7 @@ public class MainAimScreen : MonoBehaviour {
     {
         mainAim = this.transform.Find("MainAim").gameObject;
         defaultMainAimPos = mainAim.transform.localPosition;
+        playerObj = GameObject.FindGameObjectWithTag("Player").transform.Find("PlayerFollowTarget").gameObject ;
         //Debug.Log(defaultMainAimPos.y);
     }
 
@@ -58,9 +60,10 @@ public class MainAimScreen : MonoBehaviour {
         {
             // targetが画面のXY中央になるようにカメラポジション変更？
             // カメラのForwardもtargetが画面中央になるよう変更
-            //Quaternion targetRotation = Quaternion.LookRotation(target.transform.position - this.transform.position);
-            //transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 50);
-            //mainAim.transform.position = target.transform.position;
+            Vector3 lookVector = (target.transform.position - playerObj.transform.position).normalized;
+            Quaternion targetRotation = Quaternion.LookRotation(lookVector);
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 50);
+            mainAim.transform.position = target.transform.position;
         }
         else
         {
