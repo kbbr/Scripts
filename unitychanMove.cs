@@ -16,7 +16,7 @@ public class unitychanMove : MonoBehaviour {
 
     const float addNormalSpeed = 1f;        // 通常時加速度
     const float addBoostSpeed = 2f;         // ブースト時加算速度
-    const float moveSpeedMax = 5f;         // 通常時最大速度
+    const float moveSpeedMax = 4f;         // 通常時最大速度
     const float boostSpeedMax = 20f;        // ブースト時最大速度
     float jumpSpeed = 4f;            // ジャンプスピード
     const float hoverSpeed = 0.5f;
@@ -102,7 +102,7 @@ public class unitychanMove : MonoBehaviour {
         if (Input.GetAxis("Vertical") == 0)
         {
             targetSpeed.z = 0;
-
+            anim.SetTrigger("Standing");
             if (controller.isGrounded)
             {
                 // 減速値(targetSpeed = 0に向かってaddSpeed分減速する)
@@ -135,24 +135,28 @@ public class unitychanMove : MonoBehaviour {
         // ローカルからワールド座標のベクトルへ変換
         //moveSpeed = transform.TransformDirection(moveSpeed);
 
-        Vector3 newSpeedX = moveSpeed.x * this.transform.TransformDirection(Vector3.right);
-        Vector3 newSpeedZ = moveSpeed.z * this.transform.TransformDirection(Vector3.forward);
+        //Vector3 newSpeedX = moveSpeed.x * this.transform.TransformDirection(Vector3.right);
+        //Vector3 newSpeedZ = moveSpeed.z * this.transform.TransformDirection(Vector3.forward);
+        Vector3 cameraRight = new Vector3(Camera.main.transform.right.x, 0, Camera.main.transform.right.z);
+        Vector3 cameraForward = new Vector3(Camera.main.transform.forward.x, 0, Camera.main.transform.forward.z);
+        //Vector3 newSpeedX = moveSpeed.x * this.transform.TransformDirection(cameraRight);
+        //Vector3 newSpeedZ = moveSpeed.z * this.transform.TransformDirection(cameraForward);
+        Vector3 newSpeedX = moveSpeed.x * cameraRight;
+        Vector3 newSpeedZ = moveSpeed.z * cameraForward;
         Vector3 newSpeedY = Vector3.zero;
 
         dbgTextDraw();
 
+        // Jump処理(上昇と落下）
         if (Input.GetButton("Jump"))
         {
             if (controller.isGrounded)
             {
                 isJump = true;
-                //newSpeedY = jumpSpeed * this.transform.TransformDirection(Vector3.up);
             }
             // hover
             else
             {
-                //isJump = false;
-                //dbgText.text += "hover";
                 if (isBoost)
                 {
                     moveSpeed.y = gravity * Mathf.MoveTowards(moveSpeed.y, boostSpeedMax / 2, addBoostSpeed / 2) / 10;
@@ -179,21 +183,25 @@ public class unitychanMove : MonoBehaviour {
                 newSpeedY = downGrav;
             }
         }
-
+        // ジャンプ中なら
         if (isJump)
         {
             if (timeCounter == 0f)
             {
+                // ジャンプアニメーション開始(トリガーをオン)
                 anim.SetTrigger("jump");
                 anim.speed = 2f;
                 Debug.Log(timeCounter);
             }
+            // タイムカウンターを引数に処理
             timeCounter += Time.deltaTime;
             if (timeCounter < 0.3f)
             {
+                // シグモイド関数でジャンプ起動を模擬
                 jumpSpeed = 8 / (1 + 0.1f * Mathf.Exp(-32f * timeCounter));
                 newSpeedY = jumpSpeed * 1 * this.transform.TransformDirection(Vector3.up);
             }
+            // ジャンプは0.3f秒だけ、過ぎたら終わり
             else
             {
                 isJump = false;
@@ -202,6 +210,7 @@ public class unitychanMove : MonoBehaviour {
             }
         }
         
+        // ジャンプディフェンス開始
         if (!isJumpDefence && Input.GetButtonDown("JumpDefence"))
         {
             isJumpDefence = true;
@@ -213,15 +222,26 @@ public class unitychanMove : MonoBehaviour {
             
         }
 
-        //moveSpeed = newSpeedX + newSpeedZ;
         Vector3 newSpeed = newSpeedX + newSpeedZ + newSpeedY;
-
-        //dbgText.text += "moveSpeed.x: " + moveSpeed.x + "\nmoveSpeed.y: " + moveSpeed.y + "\nmoveSpeed.z: " + moveSpeed.z + "\n";
+        anim.SetFloat("speed", Mathf.Max(Mathf.Abs(moveSpeed.x), Mathf.Abs(moveSpeed.z)));
 
         // charactorControllerの制御
         controller.Move(newSpeed * Time.deltaTime);
-        //this.transform.localPosition += newSpeed * Time.deltaTime;
-        //rb.AddForce(moveSpeed * 100 * Time.deltaTime);
+
+        // moveSpeedで回転
+        if (Mathf.Abs(newSpeed.x) <= 0 && Mathf.Abs(newSpeed.z) <= 0) return;
+        //else if ((Mathf.Abs(newSpeed.x) > 0 || Mathf.Abs(newSpeed.z) > 0) && Mathf.Max(Mathf.Abs(newSpeed.x), Mathf.Abs(newSpeed.z)) < 1)
+        else if (Mathf.Max(Mathf.Abs(newSpeed.x), Mathf.Abs(newSpeed.z)) < 1)
+        {
+            transform.rotation = Quaternion.LookRotation(newSpeedX + newSpeedZ);    // Y方向は抜くため
+        }
+        // 走っているときはゆっくり回転
+        else
+        {
+            Vector3 smoothMoveSpeed = Vector3.RotateTowards(transform.forward, newSpeedX + newSpeedZ, 300 * Mathf.Deg2Rad * Time.deltaTime, 1000);
+            //smoothMoveSpeed = smoothMoveSpeed.normalized;
+            transform.rotation = Quaternion.LookRotation(smoothMoveSpeed);
+        }
 	}
 
     void dbgTextDraw()
@@ -229,6 +249,8 @@ public class unitychanMove : MonoBehaviour {
         dbgText.text = "Pos[ " + this.transform.position + " ]\n";
         dbgText.text += "ViewPos[ " + RectTransformUtility.WorldToScreenPoint(Camera.main, this.transform.position) + " ]\n";
         dbgText.text += "angle[ " + this.transform.eulerAngles + " ]\n";
+        dbgText.text += "camForward[ " + this.transform.TransformDirection(Camera.main.transform.forward) + " ]\n";
+        dbgText.text += "camRight[ " + this.transform.TransformDirection(Camera.main.transform.right) + " ]\n";
         AimRotate aimRotate;
         aimRotate = GameObject.Find("AimRotateOrigin").GetComponent<AimRotate>();
         if(aimRotate.target != null)
