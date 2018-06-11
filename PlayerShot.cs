@@ -24,9 +24,10 @@ public class PlayerShot : MonoBehaviour {
                 shotPrefab.transform.forward = (tgt.transform.position - shotPrefab.transform.position).normalized;
             else
             {
+                int layermask = ~(1 << 8);
                 Ray ray = new Ray(Camera.main.transform.position, (mainAimObj.transform.position - Camera.main.transform.position));
                 RaycastHit hit;
-                if(Physics.Raycast(ray, out hit, 1000f))
+                if(Physics.Raycast(ray, out hit, 1000f, layermask))
                 {
                     shotPrefab.transform.forward = (hit.point - shotPrefab.transform.position).normalized;
                 }
