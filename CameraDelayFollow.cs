@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class CameraDelayFollow : MonoBehaviour {
+    // CameraのPositionのみ変更するスクリプト
 
     private GameObject playerObj;
     private Vector3 offset;
@@ -14,27 +15,36 @@ public class CameraDelayFollow : MonoBehaviour {
 
     private void Awake()
     {
+        // Playerのオブジェクトを探す
         playerObj = GameObject.FindGameObjectWithTag("Player").gameObject;
     }
 
 
     // Use this for initialization
     void Start () {
+        // Playerオブジェクトと最初のカメラの位置関係をoffsetで保存
         offset = this.transform.position - playerObj.transform.position;
     }
     // Update is called once per frame
     void Update()
     {
+        // 現在のPositionを保存
         Vector3 nowPos = this.transform.position;
+        // 目的位置のPositionにoffsetを足し込む
         Vector3 targetPos = playerObj.transform.position + offset;
-        //this.transform.position = Vector3.Lerp(nowPos, targetPos, moveSpped * Time.deltaTime);
 
+        // Playerの向きを取得
         Vector3 pForward = playerObj.transform.forward;
+        // カメラの向きはPlayer位置への向きにする
         Vector3 cameraForward = this.transform.position - playerObj.transform.position;
 
+        // Playerの向きとカメラの向きの角度差を計算
         float angleVector = Vector3.Angle(pForward, cameraForward);
+        // debugログ
         vText.text = angleVector.ToString();
 
+        // Playerの向きとカメラの向きの角度差によってLerpの補間速度を変更(ヒューリスティック)
+        // 角度差：55度以下
         if (angleVector < 55f)
         {
             this.transform.position = Vector3.Lerp(nowPos, targetPos, moveSpeed * 4 * Time.deltaTime);
@@ -49,45 +59,14 @@ public class CameraDelayFollow : MonoBehaviour {
         }
         else if (angleVector < 90f) //65
         {
-            //fixPosition = this.transform.position - playerObj.transform.position;
-            //this.transform.position = playerObj.transform.position + fixPosition;
             this.transform.position = Vector3.Lerp(nowPos, targetPos, moveSpeed  * 2 * Time.deltaTime);
-            //this.transform.position = Vector3.Lerp(nowPos, targetPos, moveSpeed * Time.deltaTime);
-            //this.transform.position = Vector3.Lerp(this.transform.position, targetPos, moveSpeed * Time.deltaTime);
-
         }
+        // 角度差が90度以上
         else
         {
             this.transform.position = Vector3.Lerp(nowPos, targetPos, moveSpeed * Time.deltaTime);
         }
+        // 遅延追従をやめる
+        this.transform.position = targetPos;
     }
-
-    /*
-    void FixedUpdate () {
-        Vector3 nowPos = this.transform.position;
-        Vector3 targetPos = playerObj.transform.position + offset;
-        //this.transform.position = Vector3.Lerp(nowPos, targetPos, moveSpped * Time.deltaTime);
-        
-        Vector3 pForward = playerObj.transform.forward;
-        Vector3 cameraForward = this.transform.position - playerObj.transform.position;
-
-        float angleVector = Vector3.Angle(pForward, cameraForward);
-        vText.text = angleVector.ToString();
-
-        if (angleVector < 60f)
-        {
-            //fixPosition = this.transform.position - playerObj.transform.position;
-            //this.transform.position = playerObj.transform.position + fixPosition;
-            this.transform.position = Vector3.Slerp(nowPos, targetPos, moveSpeed * 5 * Time.deltaTime);
-            //this.transform.position = Vector3.Lerp(nowPos, targetPos, moveSpeed * Time.deltaTime);
-            //this.transform.position = Vector3.Lerp(this.transform.position, targetPos, moveSpeed * Time.deltaTime);
-
-        }
-        else
-        {
-            this.transform.position = Vector3.Lerp(nowPos, targetPos, moveSpeed * Time.deltaTime);
-        }
-        
-    }
-    */
 }
