@@ -31,4 +31,9 @@ public class jumpDefenceEvents : MonoBehaviour {
         anim.ResetTrigger("jump");
     }
 
+
+    public void OnCallChangeFace()
+    {
+        return;
+    }
 }

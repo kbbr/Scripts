@@ -5,10 +5,8 @@ using UnityEngine;
 public class AimRotate : MonoBehaviour {
 
     private GameObject mainAim;
-    public GameObject subAim;
-    public float subAimFollowSpeed = 2f;
-    public float sensitivityX = 1f;
-    public float sensitivityY = 1f;
+    public float sensitivityX = 2f;
+    public float sensitivityY = 2f;
 
     public bool reverseX = false;
     public bool reverseY = true;
@@ -29,8 +27,10 @@ public class AimRotate : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
+        // ロックオン時
         if (Input.GetButtonDown("Lock"))
         {
+            // ターゲットがいる(ロックオン中)なら、ロックを外す
             if (target != null)
             {
                 target = null;
@@ -38,6 +38,7 @@ public class AimRotate : MonoBehaviour {
                 mainAim.transform.position = this.transform.position + transform.TransformDirection(defaultMainAimPos);
 
             }
+            // ターゲットが不在(ロックオン中でない)なら、ロックオン対象のターゲットを探しターゲットにする
             else
             {
                 GameObject[] targets = GameObject.FindGameObjectsWithTag("Enemy");
@@ -54,12 +55,17 @@ public class AimRotate : MonoBehaviour {
 
             }
         }
+        // ターゲットがいるなら(ロックオン時)
         if (target != null)
         {
+            // ターゲットへのRotationをQuaternionで算出
             Quaternion targetRotation = Quaternion.LookRotation(target.transform.position - this.transform.position);
-            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 50);
+            // ターゲット方向へAimRotateの回転を更新
+            this.transform.rotation = Quaternion.Slerp(this.transform.rotation, targetRotation, Time.deltaTime * 50);
+            // MainAimのPositionをターゲットへ移動
             mainAim.transform.position = target.transform.position;
         }
+        // ターゲットが不在なら(ロックオン解除時)
         else {
 
             // マウス移動取得
@@ -71,17 +77,13 @@ public class AimRotate : MonoBehaviour {
             mouseY *= reverseY ? -1 : 1;
 
             // X軸での回転は制限を掛ける
-
             Vector3 nowRot = this.transform.localEulerAngles;
             float newX = this.transform.localEulerAngles.x + mouseY;
             newX -= newX > 180 ? 360 : 0;
             newX = Mathf.Abs(newX) > clampAngle ? Mathf.Sign(newX) * clampAngle : newX;
+            // 回転を更新
             this.transform.localEulerAngles = new Vector3(newX, nowRot.y + mouseX, 0);
 
         }
-
-        Vector3 subAimNowPos = subAim.transform.position;
-        Vector3 mainAimPos = mainAim.transform.position;
-        subAim.transform.position = Vector3.Lerp(subAimNowPos, mainAimPos, subAimFollowSpeed * Time.deltaTime);
     }
 }
