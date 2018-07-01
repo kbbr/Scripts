@@ -9,6 +9,8 @@ public class PlayerGuard : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+
+        // ターゲットを探す
         GameObject[] targets = GameObject.FindGameObjectsWithTag("Attack");
         GameObject target = null;
         float closestDistance = Mathf.Infinity;
@@ -22,12 +24,14 @@ public class PlayerGuard : MonoBehaviour {
             }
         }
 
+        // Boostボタンが押されたら
         if (Input.GetButtonDown("Boost"))
         {
-            //Debug.Log(closestObject ? closestObject.gameObject.name : "");
+            // ターゲット存在時は、ターゲットの距離を返す、いなければ無限大の距離
             float distance = target ? (target.transform.position - this.transform.position).sqrMagnitude : Mathf.Infinity;
-            if (target != null) Debug.Log(distance);
+            // ターゲットがいて、距離が5(JumpDefenceのコライダーの半径)以下なら
             if (target != null && (target.transform.position - this.transform.position).sqrMagnitude < 5) {
+                // ヒットストップ開始
                 timeManager = Camera.main.gameObject.GetComponent<TimeManager>();
                 timeManager.slowDown();
             }
