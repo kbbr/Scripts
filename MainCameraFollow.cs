@@ -74,7 +74,7 @@ public class MainCameraFollow : MonoBehaviour {
         float angleVector = Vector3.Angle(pForward, cameraForward);
         // PlayerとMainカメラの距離
         float distanceVector = (playerObj.transform.position - this.transform.position).magnitude;
-
+        
         // デバッグ用テキスト
         //dbgText.text = "";
         dbgText.text = "angleVector[ " + angleVector + " ]\n";
@@ -130,7 +130,19 @@ public class MainCameraFollow : MonoBehaviour {
         Quaternion newRotate = Quaternion.LookRotation(lookVector);
         this.transform.rotation = Quaternion.Lerp(thisRotate, newRotate, rotateSpeed * Time.deltaTime);
         */
-        this.transform.rotation = Quaternion.LookRotation(mainAimObj.transform.position - (playerObj.transform.position + new Vector3(0, 0.8f, 0)));
+        Vector3 lookVec = mainAimObj.transform.position - (playerObj.transform.position + new Vector3(0, 0.8f, 0));
+        //this.transform.rotation = Quaternion.LookRotation(lookVec);
+
+        Quaternion newRot = Quaternion.LookRotation(lookVec);
+        Vector3 nowEulerAngle = newRot.eulerAngles;
+        float clampAngle = 60f;
+        float newX = nowEulerAngle.x;
+        newX -= newX > 180 ? 360 : 0;
+        newX = Mathf.Clamp(newX, -clampAngle, clampAngle);
+        this.transform.eulerAngles = new Vector3(newX, nowEulerAngle.y, nowEulerAngle.z);
+
+        dbgText.text += "CamaraRotation  [ " + this.transform.rotation + " ]\n";
+        dbgText.text += "LookVec [ " + (mainAimObj.transform.position - (playerObj.transform.position + new Vector3(0, 0.8f, 0))) + " ]\n";
 	}
 
 }

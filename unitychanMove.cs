@@ -139,6 +139,10 @@ public class unitychanMove : MonoBehaviour {
         //Vector3 newSpeedZ = moveSpeed.z * this.transform.TransformDirection(Vector3.forward);
         Vector3 cameraRight = new Vector3(Camera.main.transform.right.x, 0, Camera.main.transform.right.z);
         Vector3 cameraForward = new Vector3(Camera.main.transform.forward.x, 0, Camera.main.transform.forward.z);
+        Transform cameraDummy = Camera.main.transform;
+        cameraDummy.eulerAngles = new Vector3(0, cameraDummy.eulerAngles.y, cameraDummy.eulerAngles.z);
+        cameraForward = cameraDummy.rotation * new Vector3(0, 0, 1f);
+
         //Vector3 newSpeedX = moveSpeed.x * this.transform.TransformDirection(cameraRight);
         //Vector3 newSpeedZ = moveSpeed.z * this.transform.TransformDirection(cameraForward);
         Vector3 newSpeedX = moveSpeed.x * cameraRight;
@@ -240,7 +244,7 @@ public class unitychanMove : MonoBehaviour {
         {
             Vector3 smoothMoveSpeed = Vector3.RotateTowards(transform.forward, newSpeedX + newSpeedZ, 300 * Mathf.Deg2Rad * Time.deltaTime, 1000);
             //smoothMoveSpeed = smoothMoveSpeed.normalized;
-            transform.rotation = Quaternion.LookRotation(smoothMoveSpeed);
+            if(smoothMoveSpeed.magnitude > 0) transform.rotation = Quaternion.LookRotation(smoothMoveSpeed);
         }
 	}
 

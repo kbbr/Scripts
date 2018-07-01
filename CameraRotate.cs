@@ -86,7 +86,12 @@ public class CameraRotate : MonoBehaviour {
         //this.transform.eulerAngles = new Vector3(newX, nowRot.y, 0);
 
         // カメラのRotationを更新(MainAim -> Playerベクトル方向で)
-        this.transform.rotation = Quaternion.LookRotation(mainAimObj.transform.position - playerFollowTargetObj.transform.position);
-
+        //this.transform.rotation = Quaternion.LookRotation(mainAimObj.transform.position - playerFollowTargetObj.transform.position);
+        Quaternion newRot = Quaternion.LookRotation(mainAimObj.transform.position - playerFollowTargetObj.transform.position);
+        Vector3 nowEulerAngle = newRot.eulerAngles;
+        newX = nowEulerAngle.x;
+        newX -= newX > 180 ? 360 : 0;
+        newX = Mathf.Clamp(newX, -clampAngle, clampAngle);
+        this.transform.eulerAngles = new Vector3(newX, nowEulerAngle.y, nowEulerAngle.z);
     }
 }
