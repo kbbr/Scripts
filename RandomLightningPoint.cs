@@ -10,7 +10,7 @@ public class RandomLightningPoint : MonoBehaviour {
 
     private void Start()
     {
-        defaultPos = this.transform.position;
+        
     }
 
     // Update is called once per frame
@@ -19,8 +19,9 @@ public class RandomLightningPoint : MonoBehaviour {
         timeCounter += Time.deltaTime;
         if(timeCounter > ChangeTime)
         {
+            defaultPos = this.transform.localPosition;
             timeCounter = 0f;
-            Vector3 newPos = new Vector3(Random.Range(-0.5f, 0.5f), 0, Random.Range(-0.5f, 0.5f));
+            Vector3 newPos = new Vector3(Random.Range(-1f, 1f), 0, Random.Range(-1f, 1f));
             this.transform.localPosition = defaultPos + newPos;
         }
 	}
