@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class jumpDefenceEvents : MonoBehaviour {
+public class JumpDefenceEvents : MonoBehaviour {
 
     //GameObject playerObj;
     //unitychanMove unitychanMove;
@@ -21,7 +21,7 @@ public class jumpDefenceEvents : MonoBehaviour {
 
     public void setIsJumpDefence()
     {
-        unitychanMove unitychanMv = GetComponent<unitychanMove>();
+        UnitychanController unitychanMv = GetComponent<UnitychanController>();
         unitychanMv.isJumpDefence = false;
     }
 
