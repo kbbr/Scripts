@@ -6,27 +6,25 @@ using UnityEngine.UI;
 public class UnitychanController : MonoBehaviour {
 
     // GameObject
-    public Text dbgText;
-    public GameObject bomb;
+    public Text dbgText;                                // デバッグ用のテキストオブジェクト
+    public GameObject bomb;                             // 攻撃のボムのゲームオブジェクト(あとで攻撃用Attackクラス実装時移動
 
     // Vector3
-    private Vector3 downGrav = Vector3.zero;
-
-    private Vector3 moveDirection = Vector3.zero;
-    private Vector3 moveSpeed;
+    private Vector3 moveDirection = Vector3.zero;       // 移動先の方向を保存するベクトル
+    private Vector3 moveSpeed;                          // 移動スピードの計算用ベクトル
 
     private Vector3 targetSpeed = Vector3.zero;         // 目標速度
     private Vector3 addSpeed = Vector3.zero;            // 加算速度
 
-    private Vector3 newSpeedX = Vector3.zero;
-    private Vector3 newSpeedZ = Vector3.zero;
-    private Vector3 newSpeedY = Vector3.zero;
-    private Vector3 newSpeed = Vector3.zero;
+    private Vector3 newSpeedX = Vector3.zero;           // 移動先のX軸のベクトル
+    private Vector3 newSpeedZ = Vector3.zero;           // 移動先のY軸のベクトル
+    private Vector3 newSpeedY = Vector3.zero;           // 移動先のZ軸のベクトル
+    private Vector3 newSpeed = Vector3.zero;            // 最終的な移動先のベクトル
 
     // const
     const float addNormalSpeed = 1f;        // 通常時加速度
     const float addBoostSpeed = 2f;         // ブースト時加算速度
-    const float moveSpeedMax = 4f;         // 通常時最大速度
+    const float moveSpeedMax = 4f;          // 通常時最大速度
     const float boostSpeedMax = 20f;        // ブースト時最大速度
     const float hoverSpeed = 0.5f;
 
@@ -35,13 +33,13 @@ public class UnitychanController : MonoBehaviour {
     private CharacterController controller;
 
     // bool
-    public bool isJumpDefence;
-    public bool isJump = false;
+    public bool isJumpDefence;              // ジャンプディフェンス中かどうかのフラグ
+    public bool isJump = false;             // ジャンプ中かどうかのフラグ
 
     // float
-    public float speed = 15f;
-    public float gravity = 20f;
-    private float timeCounter = 0f;
+    private float downGrav = 0f;            // 自由落下の変位を保存する一時変数
+    public float gravity = 20f;             // 重力の加速度
+    private float timeCounter = 0f;         // ジャンプ中の時間計測のカウンター
 
     // Use this for initialization
     void Start () {
@@ -55,10 +53,13 @@ public class UnitychanController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-
+        // ジャンプガード
         UnitychanGuard();
+        // 向きの回転
         UnitychanRotate();
+        // 移動
         UnitychanMove();
+        // デバッグテキストの表示
         dbgTextDraw();
 
 	}
@@ -70,27 +71,36 @@ public class UnitychanController : MonoBehaviour {
         if (controller.isGrounded)
         {
             moveDirection.y = 0;
-            downGrav = Vector3.zero;
+            downGrav = 0f;
         }
 
         UnitychanVerticalMove();
         UnitychanHorizontalMove();
         UnitychanJump();
 
+        // カメラの右方向(Y軸情報は削る)
         Vector3 cameraRight = new Vector3(Camera.main.transform.right.x, 0, Camera.main.transform.right.z);
+        // カメラの前方向(Y軸情報は削る)
         Vector3 cameraForward = new Vector3(Camera.main.transform.forward.x, 0, Camera.main.transform.forward.z);
+
         Transform cameraDummy = Camera.main.transform;
+        // カメラのY軸・Z軸回転情報を保存
         cameraDummy.eulerAngles = new Vector3(0, cameraDummy.eulerAngles.y, cameraDummy.eulerAngles.z);
+        // カメラの前方向の計算
         cameraForward = cameraDummy.rotation * new Vector3(0, 0, 1f);
+
+        // それぞれのXYZ軸に合わせて移動先のベクトル計算
         newSpeedX = moveSpeed.x * cameraRight;
         newSpeedZ = moveSpeed.z * cameraForward;
+        newSpeedY = moveSpeed.y * this.transform.TransformDirection(Vector3.up);
 
+        // 最終的な移動先のベクトルを計算
         newSpeed = newSpeedX + newSpeedZ + newSpeedY;
+
+        // アニメーターのspeed係数はXZ軸上の移動スピードの最大値にセット
         anim.SetFloat("speed", Mathf.Max(Mathf.Abs(moveSpeed.x), Mathf.Abs(moveSpeed.z)));
 
-
-
-        // charactorControllerの制御
+        // charactorControllerの制御(移動処理)
         controller.Move(newSpeed * Time.deltaTime);
     }
 
@@ -126,8 +136,6 @@ public class UnitychanController : MonoBehaviour {
 
         // 前後移動速度
         moveSpeed.z = Mathf.MoveTowards(moveSpeed.z, targetSpeed.z, addSpeed.z);
-        // ローカルからワールド座標のベクトルへ変換
-        //moveSpeed = transform.TransformDirection(moveSpeed);
     }
 
     private void UnitychanHorizontalMove()
@@ -196,14 +204,14 @@ public class UnitychanController : MonoBehaviour {
             {
                 if (InputController.IsBoostButton)
                 {
+                    // HoverSpeedを別途調整すべき？マジックナンバーすぎ
                     moveSpeed.y = gravity * Mathf.MoveTowards(moveSpeed.y, boostSpeedMax / 2, addBoostSpeed / 2) / 10;
-                    newSpeedY = this.transform.TransformDirection(Vector3.up) * moveSpeed.y;
                 }
                 else
                 {
-                    newSpeedY = hoverSpeed * gravity * this.transform.TransformDirection(Vector3.up);
+                    moveSpeed.y = hoverSpeed * gravity;
                 }
-                downGrav = -gravity * this.transform.TransformDirection(Vector3.up) * Time.deltaTime;
+                downGrav = -gravity * Time.deltaTime;
             }
         }
         // down to Geometry
@@ -211,18 +219,20 @@ public class UnitychanController : MonoBehaviour {
         {
             if (InputController.IsBoostButton)
             {
-                downGrav = -gravity * this.transform.TransformDirection(Vector3.up) * Time.deltaTime * Time.deltaTime;
-                newSpeedY = downGrav;
+                // 自由落下 - 1/2at^2
+                downGrav = -gravity * Time.deltaTime * Time.deltaTime;
+                moveSpeed.y = downGrav;
             }
             else
             {
-                downGrav += -gravity * this.transform.TransformDirection(Vector3.up) * Time.deltaTime;
-                newSpeedY = downGrav;
+                downGrav += -gravity * Time.deltaTime;
+                moveSpeed.y = downGrav;
             }
         }
         // ジャンプ中なら
         if (isJump)
         {
+            // ジャンプ開始始まり
             if (timeCounter == 0f)
             {
                 // ジャンプアニメーション開始(トリガーをオン)
@@ -236,7 +246,7 @@ public class UnitychanController : MonoBehaviour {
             {
                 // シグモイド関数でジャンプ起動を模擬
                 jumpSpeed = 8 / (1 + 0.1f * Mathf.Exp(-32f * timeCounter));
-                newSpeedY = jumpSpeed * 1 * this.transform.TransformDirection(Vector3.up);
+                moveSpeed.y = jumpSpeed;
             }
             // ジャンプは0.3f秒だけ、過ぎたら終わり
             else
@@ -266,7 +276,7 @@ public class UnitychanController : MonoBehaviour {
     {
         dbgText.text = "Pos[ " + this.transform.position + " ]\n";
         dbgText.text += "ViewPos[ " + RectTransformUtility.WorldToScreenPoint(Camera.main, this.transform.position) + " ]\n";
-        dbgText.text += "angle[ " + this.transform.eulerAngles + " ]\n";
+        dbgText.text += "CamaraEulerAngles[ " + Camera.main.transform.eulerAngles + " ]\n";
         dbgText.text += "camForward[ " + this.transform.TransformDirection(Camera.main.transform.forward) + " ]\n";
         dbgText.text += "camRight[ " + this.transform.TransformDirection(Camera.main.transform.right) + " ]\n";
         dbgText.text += "jumpBool[ " + InputController.IsJumpButton + "]\n";
