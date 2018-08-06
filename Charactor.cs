@@ -5,13 +5,13 @@ using UnityEngine;
 public abstract class Charactor : MonoBehaviour {
 
     /// <summary>
-    /// Player HP
+    /// Charactor HP
     /// </summary>
-    public float _playerHP = 0f;
+    public float CharactorHP { get; set; }
     /// <summary>
-    /// Player Position
+    /// Charactor Position
     /// </summary>
-    public Vector3 _playerPos = Vector3.zero;
+    public Vector3 CnaractorPosition { get; set; }
 
     public virtual void playerMove() { }
 
