@@ -27,6 +27,7 @@ public class UnitychanController : Player {
     const float moveSpeedMax = 4f;          // 通常時最大速度
     const float boostSpeedMax = 20f;        // ブースト時最大速度
     const float hoverSpeed = 0.5f;
+    const float unitychanMAXHP = 400f;
 
     // Animator
     private Animator anim;
@@ -35,12 +36,19 @@ public class UnitychanController : Player {
     // bool
     public bool isJumpDefence;              // ジャンプディフェンス中かどうかのフラグ
     public bool isJump = false;             // ジャンプ中かどうかのフラグ
+    public bool isInvisible = false;        // 無敵時の透明/不透明フラグ
 
     // float
-    private float downGrav = 0f;            // 自由落下の変位を保存する一時変数
     public float gravity = 20f;             // 重力の加速度
+    public float unitychanHP = 400f;
+    private float downGrav = 0f;            // 自由落下の変位を保存する一時変数
     private float timeCounter = 0f;         // ジャンプ中の時間計測のカウンター
 
+    // HP Display用(テスト実装)
+    [SerializeField]
+    private GameObject charaHPObj;
+    private PlayerHPDisplay HPDisplay;
+    
     // Use this for initialization
     void Start () {
         moveSpeed = Vector3.zero;
@@ -49,7 +57,8 @@ public class UnitychanController : Player {
         controller = GetComponent<CharacterController>();
         anim = GetComponent<Animator>();
         //rb = GetComponent<Rigidbody>();
-	}
+        HPDisplay = charaHPObj.GetComponent<PlayerHPDisplay>();
+    }
 	
 	// Update is called once per frame
 	void Update () {
@@ -58,14 +67,17 @@ public class UnitychanController : Player {
         // 向きの回転
         UnitychanRotate();
         // 移動
-        UnitychanMove();
+        PlayerMove();
         // デバッグテキストの表示
         dbgTextDraw();
+
+        unitychanHP--;
+        HPDisplay.PlayerHPUpdate(unitychanHP, unitychanMAXHP);
 
 	}
 
 
-    public void UnitychanMove()
+    public override void PlayerMove()
     {   
         // 接地時の重力移動なし
         if (controller.isGrounded)

@@ -31,31 +31,7 @@ public class MainAimScreen : MonoBehaviour {
     void Update()
     {
 
-        if (Input.GetButtonDown("Lock"))
-        {
-            if (target != null)
-            {
-                target = null;
-                // mainAimのrotationとpositionをロック前に戻す
-            }
-            else
-            {
-                // 最近距離の敵をロック対象
-                GameObject[] targets = GameObject.FindGameObjectsWithTag("Enemy");
-                float closestDistance = Mathf.Infinity;
-                foreach (GameObject closest in targets)
-                {
-                    float distance = (closest.transform.position - this.transform.position).sqrMagnitude;
-                    if (distance < closestDistance)
-                    {
-                        closestDistance = distance;
-                        target = closest;
-                    }
-                }
-                target = target.transform.Find("lockTarget").gameObject;
-
-            }
-        }
+        target = GameSystem.PlayerTarget;
         if (target != null)
         {
             // targetが画面のXY中央になるようにカメラポジション変更？

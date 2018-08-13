@@ -24,31 +24,7 @@ public class CameraRotate : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         // ロックオンボタンが押されたとき
-        if (Input.GetButtonDown("Lock"))
-        {
-            // ターゲットがいる(ロックオン中)なら、ロックを外す
-            if (target != null)
-            {
-                target = null;
-            }
-            // ターゲットが不在(ロックオン中でない)なら、ロックオン対象のターゲットを探しターゲットにする
-            else
-            {
-                GameObject[] targets = GameObject.FindGameObjectsWithTag("Enemy");
-                float closestDistance = Mathf.Infinity;
-                foreach (GameObject closest in targets)
-                {
-                    float distance = (closest.transform.position - this.transform.position).sqrMagnitude;
-                    if (distance < closestDistance)
-                    {
-                        closestDistance = distance;
-                        target = closest;
-                    }
-                }
-                target = target.transform.Find("lockTarget").gameObject;
-
-            }
-        }
+        target = GameSystem.PlayerTarget;
 
         // マウスの上下移動を取得
         float mouseY = Input.GetAxis("Mouse Y") * sensitivityX; ;

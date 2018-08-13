@@ -8,4 +8,6 @@ public class Player : Charactor {
     protected Vector3 moveForward;
     protected Vector3 moveRight;
 
+
+    public virtual void PlayerMove() { }
 }

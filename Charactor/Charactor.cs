@@ -4,15 +4,13 @@ using UnityEngine;
 
 public abstract class Charactor : MonoBehaviour {
 
-    /// <summary>
-    /// Charactor HP
-    /// </summary>
+    /// <summary> Charactorの現在のHP /// </summary>
     public float CharactorHP { get; set; }
-    /// <summary>
-    /// Charactor Position
-    /// </summary>
+    /// <summary> CharactorのMAXHP /// </summary>
+    public float CharactorMAXHP { get; set; }
+
+    /// <summary> Charactorの現在のPosition /// </summary>
     public Vector3 CharactorPosition { get; set; }
 
-    public virtual void playerMove() { }
 
 }
