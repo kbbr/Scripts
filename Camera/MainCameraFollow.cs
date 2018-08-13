@@ -31,34 +31,7 @@ public class MainCameraFollow : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         // ロックオンボタンが押されたとき
-        if (Input.GetButtonDown("Lock"))
-        {
-            // ターゲットがいる(ロックオン中)なら、ロックを外す
-            if (target != null)
-            {
-                target = null;
-                rotateSpeed = 6f;
-                //cameraFollowSpeed = 4f;
-            }
-            // ターゲットが不在(ロックオン中でない)なら、ロックオン対象のターゲットを探しターゲットにする
-            else
-            {
-                GameObject[] targets = GameObject.FindGameObjectsWithTag("Enemy");
-                float closestDistance = Mathf.Infinity;
-                foreach (GameObject closest in targets)
-                {
-                    float distance = (closest.transform.position - this.transform.position).sqrMagnitude;
-                    if (distance < closestDistance)
-                    {
-                        closestDistance = distance;
-                        target = closest;
-                    }
-                }
-                target = target.transform.Find("lockTarget").gameObject;
-                rotateSpeed = 6f;
-                //cameraFollowSpeed = 16f;
-            }
-        }
+        target = GameSystem.PlayerTarget;
         
         // カメラの現在位置を保存
         Vector3 nowPos = this.transform.position;
