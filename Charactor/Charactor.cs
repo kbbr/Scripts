@@ -11,7 +11,7 @@ public abstract class Charactor : MonoBehaviour {
     /// <summary>
     /// Charactor Position
     /// </summary>
-    public Vector3 CnaractorPosition { get; set; }
+    public Vector3 CharactorPosition { get; set; }
 
     public virtual void playerMove() { }
 

@@ -15,7 +15,7 @@ public sealed class InputController : MonoBehaviour {
     {
         get
         {
-            if(_instance != null)
+            if (_instance != null)
                 return _instance;
             var gameObject = new GameObject();
             _instance = gameObject.AddComponent<InputController>();
@@ -39,6 +39,8 @@ public sealed class InputController : MonoBehaviour {
 
     static public bool IsVerticalMove = false;
 
+    static public bool IsLocked = false;
+
     private void Awake()
     {
         IsJumpButton = false;
@@ -47,6 +49,7 @@ public sealed class InputController : MonoBehaviour {
         IsBoostButton = false;
         IsHorizontalMove = false;
         IsVerticalMove = false;
+        IsLocked = false;
     }
 
     private void Update()
@@ -88,7 +91,12 @@ public sealed class InputController : MonoBehaviour {
             IsJumpButton = true;
         else
             IsJumpButton = false;
-    }
 
+        // Lockボタンが押されているか
+        if (Input.GetButton("Jump"))
+            IsLocked = true;
+        else
+            IsLocked = false;
+        }
 
 }

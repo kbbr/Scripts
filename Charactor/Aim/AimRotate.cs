@@ -27,34 +27,8 @@ public class AimRotate : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-        // ロックオン時
-        if (Input.GetButtonDown("Lock"))
-        {
-            // ターゲットがいる(ロックオン中)なら、ロックを外す
-            if (target != null)
-            {
-                target = null;
-                mainAim.transform.rotation = this.transform.rotation;
-                mainAim.transform.position = this.transform.position + transform.TransformDirection(defaultMainAimPos);
+        target = GameSystem.PlayerTarget;
 
-            }
-            // ターゲットが不在(ロックオン中でない)なら、ロックオン対象のターゲットを探しターゲットにする
-            else
-            {
-                GameObject[] targets = GameObject.FindGameObjectsWithTag("Enemy");
-                float closestDistance = Mathf.Infinity;
-                foreach (GameObject closest in targets)
-                {
-                    float distance = (closest.transform.position - this.transform.position).sqrMagnitude;
-                    if (distance < closestDistance){
-                        closestDistance = distance;
-                        target = closest;
-                    }
-                }
-                target = target.transform.Find("lockTarget").gameObject;
-
-            }
-        }
         // ターゲットがいるなら(ロックオン時)
         if (target != null)
         {

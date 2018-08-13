@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UnitychanController : MonoBehaviour {
+public class UnitychanController : Player {
 
     // GameObject
     public Text dbgText;                                // デバッグ用のテキストオブジェクト
