@@ -1,77 +1,16 @@
-# Aim
+# Todo
 
-- AimRotateOrigin
-  - MainAim
-  - scope
-    - targetCursor
+ã‚ã¾ã‚Šã«ã‚‚READMEãŒå¾®å¦™ãªã®ã§ã€ã—ã°ã‚‰ãã¯TODOãƒªã‚¹ãƒˆã«
 
-## AimRotate.cs
-Aim‚Ì‰ñ“]§Œä
-
-## MainAimFollow.cs
-Aim‚Ìposition§Œä
-
-
-# Camera
-
-- CameraRotateOrigin
-  - CameraPosition
-
-## CameraDelayFollow.cs
-CameraRotateOrigin‚ðƒvƒŒƒCƒ„[‚É’Ç]‚³‚¹‚é§Œä
-
-## CameraRotate.cs
-ƒJƒƒ‰‚Ì‰ñ“]§Œä
-
-## MainCameraFollow.cs
-ƒJƒƒ‰‚ÌƒJƒƒ‰ƒ|ƒWƒVƒ‡ƒ“‚Ö‚Ì’Ç]§Œä
-
-
-
-# Enemy
-
-## Enemy.cs
-- ƒ^[ƒQƒbƒgƒJ[ƒ\ƒ‹•\Ž¦
-- ƒoƒŠƒA[‚Ì“–‚½‚è”»’è
-
-
-
-# Player
-
-## unitychanMove.cs
-- SDunitychan‚ÌˆÚ“®EƒWƒƒƒ“ƒvEã¸
-- ƒWƒƒƒ“ƒvƒAƒjƒ[ƒVƒ‡ƒ“
-- ƒWƒƒƒ“ƒvƒfƒBƒtƒFƒ“ƒX
-  - ƒWƒƒƒ“ƒvƒfƒBƒtƒFƒ“ƒXƒAƒjƒ[ƒVƒ‡ƒ“
-
-## jumpDefenceEvents.cs
- - ƒWƒƒƒ“ƒvƒfƒBƒtƒFƒ“ƒX‚ÌƒAƒjƒ[ƒVƒ‡ƒ“ƒCƒxƒ“ƒg
-   - ƒWƒƒƒ“ƒvƒfƒBƒtƒFƒ“ƒX‚ÌƒAƒjƒ[ƒVƒ‡ƒ“‚ÌƒgƒŠƒK[‚ª‰½ŒÌ‚©ƒIƒ“‚É‚È‚è‘±‚¯‚é‚½‚ß
-
-## PlayerGuard.cs
-- ƒvƒŒƒCƒ„[‚ÌƒK[ƒh§Œä
-
-## PlayerRotate.cs
-ƒvƒŒƒCƒ„[‚Ì‰ñ“]§Œä
-
-## PlayerShot.cs
-ƒvƒŒƒCƒ„[‚Ì‰“‹——£UŒ‚§Œä
-
-## ParticleCollision.cs
-ƒWƒƒƒ“ƒvƒK[ƒh‚ÌƒRƒŠƒWƒ‡ƒ“§Œä
-
-## ShotPlayer.cs
-ƒvƒŒƒCƒ„[‚©‚çƒVƒ‡ƒbƒg‚³‚ê‚½’e‚Ì§Œä
-
-## EffectGenerate.cs
-
-
-# GameManager
-
-## TimeManager.cs
-- ƒqƒbƒgƒXƒgƒbƒviƒXƒƒEj
-
-
-## ParticleAutoDestroy.cs
-- ƒp[ƒeƒBƒNƒ‹‚ÌŽžŠÔŒo‰ß‚ÅŽ©“®íœ
-
+- GameSystemã§ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆåˆæœŸåŒ–
+  - ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã¯ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹åŒ– -> ã‚¹ã‚¯ãƒªãƒ—ãƒˆAddComponent
+    - ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’ç®¡ç†ã™ã‚‹Managerçš„ã‚¹ã‚¯ãƒªãƒ—ãƒˆã‚’ä½œæˆ
+  - UIã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+    - PlayerHPã®æ›´æ–°ãƒ¡ã‚½ãƒƒãƒ‰ã¸ã®ã‚¢ã‚¯ã‚»ã‚¹æ–¹æ³•ãŒ
+    ã„ã¡ã„ã¡SerializedFieldã‚„Publicã‚„ã‚‰Findã‚„ã‚‰ã™ã‚‹ã®ãŒç…©é›‘
+  - 
+- PlayerManagerã®å°Žå…¥
+  - Playerã‚­ãƒ£ãƒ©ã®å¤‰æ›´ã«å‚™ãˆã¦
+  - ç¾çŠ¶ã¯ã€Playerã®ã‚¹ã‚¯ãƒªãƒ—ãƒˆã«ã‚ã‚‰ã‚†ã‚‹å‡¦ç†ã‚„å¤‰æ•°ãŒã‚ã‚‹
+  - ä»–ã‚¯ãƒ©ã‚¹ã‹ã‚‰ã®ã‚¢ã‚¯ã‚»ã‚¹ã‚‚ã—ãŸã„ã®ã§ä¿®æ­£ï¼Ÿ
+  - ã“ã‚Œã‚‚ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ç”Ÿæˆ -> ã‚¢ã‚¿ãƒƒãƒ
