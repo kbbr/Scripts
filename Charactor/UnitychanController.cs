@@ -46,8 +46,7 @@ public class UnitychanController : Player {
 
     // HP Display用(テスト実装)
     [SerializeField]
-    private GameObject charaHPObj;
-    private PlayerHPDisplay HPDisplay;
+    private PlayerHPDisplay HPDisplay = null;
     
     // Use this for initialization
     void Start () {
@@ -57,7 +56,6 @@ public class UnitychanController : Player {
         controller = GetComponent<CharacterController>();
         anim = GetComponent<Animator>();
         //rb = GetComponent<Rigidbody>();
-        HPDisplay = charaHPObj.GetComponent<PlayerHPDisplay>();
     }
 	
 	// Update is called once per frame
@@ -71,7 +69,7 @@ public class UnitychanController : Player {
         // デバッグテキストの表示
         dbgTextDraw();
 
-        unitychanHP--;
+        // HPゲージの表示更新
         HPDisplay.PlayerHPUpdate(unitychanHP, unitychanMAXHP);
 
 	}
