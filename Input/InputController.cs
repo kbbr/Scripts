@@ -35,6 +35,8 @@ public sealed class InputController : MonoBehaviour {
 
     public static bool IsBoostButton = false;
 
+    public static bool IsBoostButtonDown = false;
+
     public static bool IsHorizontalMove = false;
 
     public static bool IsVerticalMove = false;
@@ -47,6 +49,7 @@ public sealed class InputController : MonoBehaviour {
         IsAttackButton = false;
         IsGuardButton = false;
         IsBoostButton = false;
+        IsBoostButtonDown = false;
         IsHorizontalMove = false;
         IsVerticalMove = false;
         IsLocked = false;
@@ -79,6 +82,12 @@ public sealed class InputController : MonoBehaviour {
             IsBoostButton = true;
         else
             IsBoostButton = false;
+
+        // ブーストボタンが押された瞬間か
+        if (Input.GetButtonDown("Boost"))
+            IsBoostButtonDown = true;
+        else
+            IsBoostButtonDown = false;
 
         // ガードボタンが押されているか
         if (Input.GetButton("JumpDefence"))
