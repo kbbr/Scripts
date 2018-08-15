@@ -282,6 +282,18 @@ public class UnitychanController : Player {
         }
     }
 
+    // ダメージ処理
+    public void UnitychanDamage(float damagePower)
+    {
+        unitychanHP -= damagePower;
+    }
+
+    // 回復処理
+    public void UnitychanHeal(float healPower)
+    {
+        unitychanHP -= healPower;
+    }
+
     void dbgTextDraw()
     {
         dbgText.text = "Pos[ " + this.transform.position + " ]\n";

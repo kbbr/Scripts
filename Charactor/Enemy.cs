@@ -67,6 +67,15 @@ public class Enemy : MonoBehaviour {
             rb.velocity = forceBarrier * 10;
             Debug.Log("barrier");
         }
-    }
 
+    }
+    
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.tag == "Player")
+        {
+            playerObj.GetComponent<UnitychanController>().UnitychanDamage(100f);
+        }
+    }
+    
 }
