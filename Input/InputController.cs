@@ -11,7 +11,7 @@ public sealed class InputController : MonoBehaviour {
     static private InputController _instance;
 
     /// <summary> インスタンスのアクセッサ </summary>
-    static public InputController Instance
+    public static InputController Instance
     {
         get
         {
@@ -27,19 +27,19 @@ public sealed class InputController : MonoBehaviour {
     [SerializeField]
     //private UnitychanController listener = null;
 
-    static public bool IsJumpButton = false;
+    public static bool IsJumpButton = false;
 
-    static public bool IsAttackButton = false;
+    public static bool IsAttackButton = false;
 
-    static public bool IsGuardButton = false;
+    public static bool IsGuardButton = false;
 
-    static public bool IsBoostButton = false;
+    public static bool IsBoostButton = false;
 
-    static public bool IsHorizontalMove = false;
+    public static bool IsHorizontalMove = false;
 
-    static public bool IsVerticalMove = false;
+    public static bool IsVerticalMove = false;
 
-    static public bool IsLocked = false;
+    public static bool IsLocked = false;
 
     private void Awake()
     {

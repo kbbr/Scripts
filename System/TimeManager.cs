@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class TimeManager : MonoBehaviour {
 
-    private float timeScale = 0.2f;
+    private float slowTimeScale = 0.2f;
     private float slowTime = 0.5f;
     private float elapsedTime = 0f;
     private bool isSlowDown = false;
@@ -17,6 +17,8 @@ public class TimeManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+        // スロー中のフラグがONなら
+        // slowTimeの間、timeScaleをtimeScale(0.2)にする
         if (isSlowDown)
         {
             elapsedTime += Time.unscaledDeltaTime;
@@ -27,16 +29,18 @@ public class TimeManager : MonoBehaviour {
         }
 	}
 
+    // スロー開始
     public void slowDown()
     {
         if (!isSlowDown)
         {
             elapsedTime = 0f;
-            Time.timeScale = timeScale;
+            Time.timeScale = slowTimeScale;
             isSlowDown = true;
         }
     }
 
+    // スロー解除
     public void setNormalTimeScale()
     {
         Time.timeScale = 1f;
@@ -44,11 +48,13 @@ public class TimeManager : MonoBehaviour {
         StartCoroutine("delaySetSlowDown");
     }
 
+    // スローかどうかのフラグを返す
     public bool returnEndSlowDown()
     {
         return isSlowDown;
     }
 
+    // 0.5秒処理待ちするデリゲート
     private IEnumerator delaySetSlowDown()
     {
         yield return new WaitForSeconds(0.5f);

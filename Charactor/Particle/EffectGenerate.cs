@@ -9,42 +9,33 @@ public class EffectGenerate : MonoBehaviour {
     GameObject moveMagicSquare;
 
     bool isBoost = false;
-    //bool endBoost = false;
-
-    // Use this for initialization
-    void Start () {
-
-	}
 	
 	// Update is called once per frame
 	void Update () {
-        if (Input.GetButtonDown("Boost"))
+        // ブーストボタンが押されたら
+        if (InputController.IsBoostButton)
         {
             isBoost = true;
-            //endBoost = false;
             generateBoostEffect();
 
         }
-        if(isBoost && !Input.GetButton("Boost")){
-            //endBoost = true;
+        if(isBoost && !InputController.IsBoostButton)
+        {
             isBoost = false;
             destroyBoostEffect();
         }
 	}
 
+    // Boostのエフェクト作成
     void generateBoostEffect()
     {
-        /*
-        Vector3 pos = this.transform.position - new Vector3(0, 0f, 0);
-        GameObject effectInstance = Instantiate(boostEffect, pos, transform.rotation);
-        Destroy(effectInstance, 1f);
-        */
-        //Vector3 pos = this.transform.position - new Vector3(0, 0.1f, 0);
         moveMagicSquare = Instantiate(magicSquare, transform.position, transform.rotation);
         moveMagicSquare.transform.parent = this.transform;
         moveMagicSquare.transform.position += new Vector3(0, 0.1f, 0);
 
     }
+
+    // Boostのエフェクトを削除
     void destroyBoostEffect()
     {
         ParticleSystem prtSys = moveMagicSquare.transform.GetChild(0).gameObject.GetComponent<ParticleSystem>();
