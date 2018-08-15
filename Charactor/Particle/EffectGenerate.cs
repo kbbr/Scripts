@@ -13,12 +13,13 @@ public class EffectGenerate : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         // ブーストボタンが押されたら
-        if (InputController.IsBoostButton)
+        if (!isBoost && InputController.IsBoostButton)
         {
             isBoost = true;
             generateBoostEffect();
 
         }
+        // ブースト中だが、ブーストボタンが押されなくなったとき
         if(isBoost && !InputController.IsBoostButton)
         {
             isBoost = false;
@@ -39,8 +40,6 @@ public class EffectGenerate : MonoBehaviour {
     void destroyBoostEffect()
     {
         ParticleSystem prtSys = moveMagicSquare.transform.GetChild(0).gameObject.GetComponent<ParticleSystem>();
-        //prtSys.Simulate(300f, true, false);
-        //prtSys.time = 290f;
         var simMain= prtSys.main;
         simMain.simulationSpeed = 1200f;
         for(int i = 0; i < moveMagicSquare.transform.GetChild(0).childCount; i++)
