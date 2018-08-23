@@ -1,27 +1,46 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
-public class GameSystem : MonoBehaviour {
+public class GameSystem : SingletonMonoBehaviour<GameSystem> {
+
+    // プレイヤー名
+    public string PlayerName { set; get; }
 
     // プレイヤーのオブジェクト
-    public static GameObject PlayerObject {set; get;}
+    public GameObject PlayerObject {set; get;}
 
     // プレイヤーにとってのターゲット
-    public static GameObject PlayerTarget { set; get; }
+    public GameObject PlayerTarget { set; get; }
 
     // エネミーにとってのターゲット
-    public static GameObject EnemyTarget { set; get; }
+    public GameObject EnemyTarget { set; get; }
 
-    public static GameObject MainAim { set; get; }
+    public GameObject MainAim { set; get; }
+
     public Vector3 defaultMainAimPos;
 
-    private void Awake()
+    private Dictionary<string, int> charactorNumber = new Dictionary<string, int>();
+
+    // プレイヤーGameObjectのプレファブ
+    public GameObject[] PlayerPrefabs;
+    
+    protected override void Awake()
     {
-        MainAim = GameObject.Find("World/AimRotateOrigin/MainAim").gameObject;
-        defaultMainAimPos = MainAim.transform.localPosition;
+        // 継承前のAwakeを実行(Singletonでのチェック関数のみ実行)
+        base.Awake();
+        // オブジェクトの走査
         PlayerTarget = null;
-        PlayerObject = GameObject.Find("World/Player");
+
+        // シーン読み込み時に実行
+        SceneManager.sceneLoaded += OnSceneLoaded;
+        // このオブジェクトはシーン移動でオブジェクト破棄しない
+        DontDestroyOnLoad(gameObject);
+
+        // ディクショナリ追加
+        charactorNumber.Add("SDunitychan", 0);
+        charactorNumber.Add("SDmisakichan", 1);
+
     }
 
     private void Update()
@@ -62,4 +81,26 @@ public class GameSystem : MonoBehaviour {
         }
     }
 
+    // シーン読み込み時に実行
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        // MainSceneが読み込まれたとき
+        if (scene.name == "MainScene")
+            MainSceneLoaded();
+    }
+
+    private void MainSceneLoaded()
+    {
+        // 戦闘用オブジェクトの読み込み
+        MainAim = GameObject.FindGameObjectWithTag("MainAim").gameObject;
+        defaultMainAimPos = MainAim.transform.localPosition;
+
+        // Playerオブジェクトの生成
+        if (GameObject.FindGameObjectWithTag("Player") == null)
+        {
+            GameObject playerInstance = Instantiate(PlayerPrefabs[charactorNumber[PlayerName]], PlayerPrefabs[charactorNumber[PlayerName]].transform.position, PlayerPrefabs[charactorNumber[PlayerName]].transform.rotation);
+            playerInstance.transform.parent = GameObject.Find("World").transform;
+            PlayerObject = playerInstance;
+        }
+    }
 }
