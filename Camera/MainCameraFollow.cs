@@ -22,16 +22,16 @@ public class MainCameraFollow : MonoBehaviour {
         // Cemearaの追従先オブジェクトのPosition: CameraPosition
         cameraPositionTargetObj = cameraLookTargetObj.transform.Find("CameraPosition").gameObject;
         // Playerオブジェクト
-        playerObj = GameObject.FindGameObjectWithTag("Player").gameObject;
+        playerObj = GameSystem.Instance.PlayerObject;
         // mainAimObj
-        mainAimObj = GameObject.Find("MainAim");
+        mainAimObj = GameSystem.Instance.MainAim;
         dbgText.text = "";
 	}
 	
 	// Update is called once per frame
 	void Update () {
         // ロックオンボタンが押されたとき
-        target = GameSystem.PlayerTarget;
+        target = GameSystem.Instance.PlayerTarget;
         
         // カメラの現在位置を保存
         Vector3 nowPos = this.transform.position;

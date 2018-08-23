@@ -13,7 +13,7 @@ public class CameraFollowFixedUpdate : MonoBehaviour {
     // Use this for initialization
     private void Awake()
     {
-        playerObj = GameObject.FindGameObjectWithTag("Player").gameObject;
+        playerObj = GameSystem.Instance.PlayerObject;
     }
 
 

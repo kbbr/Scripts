@@ -11,7 +11,7 @@ public class PlayerDbgTextPos : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         thisRectTransform = GetComponent<RectTransform>();
-        playerObj = GameObject.FindGameObjectWithTag("Player");
+        playerObj = GameSystem.Instance.PlayerObject;
 	}
 	
 	// Update is called once per frame

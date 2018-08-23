@@ -6,8 +6,10 @@ using UnityEngine.UI;
 public class CameraDelayFollow : MonoBehaviour {
     // CameraのPositionのみ変更するスクリプト
 
+    [SerializeField]
     private GameObject playerObj;
-    private Vector3 offset;
+    [SerializeField]
+    private Vector3 offset = new Vector3(0, 0.8f, 0);
     public float moveSpeed = 8f;
     private Vector3 fixPosition;
 
@@ -15,15 +17,16 @@ public class CameraDelayFollow : MonoBehaviour {
 
     private void Awake()
     {
-        // Playerのオブジェクトを探す
-        playerObj = GameObject.FindGameObjectWithTag("Player").gameObject;
+        
     }
 
 
     // Use this for initialization
     void Start () {
+        // Playerのオブジェクトを探す
+        playerObj = GameSystem.Instance.PlayerObject;
         // Playerオブジェクトと最初のカメラの位置関係をoffsetで保存
-        offset = this.transform.position - playerObj.transform.position;
+        this.transform.position = playerObj.transform.position;
     }
     // Update is called once per frame
     void Update()

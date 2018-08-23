@@ -20,7 +20,7 @@ public class Enemy : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-        playerObj = GameObject.Find("Player");
+        playerObj = GameSystem.Instance.PlayerObject;
         targetCursor = Instantiate(targetCursorPrefab, transform.position, transform.rotation);
         isCursor = false;
         Destroy(this, 200);

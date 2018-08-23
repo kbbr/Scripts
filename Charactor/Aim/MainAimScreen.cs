@@ -23,7 +23,7 @@ public class MainAimScreen : MonoBehaviour {
     {
         mainAim = this.transform.Find("MainAim").gameObject;
         defaultMainAimPos = mainAim.transform.localPosition;
-        playerObj = GameObject.FindGameObjectWithTag("Player").transform.Find("PlayerFollowTarget").gameObject ;
+        playerObj = GameObject.FindGameObjectWithTag("Player").transform.Find("PlayerFollowTarget").gameObject;
         //Debug.Log(defaultMainAimPos.y);
     }
 
@@ -31,7 +31,7 @@ public class MainAimScreen : MonoBehaviour {
     void Update()
     {
 
-        target = GameSystem.PlayerTarget;
+        target = GameSystem.Instance.PlayerTarget;
         if (target != null)
         {
             // targetが画面のXY中央になるようにカメラポジション変更？

@@ -46,7 +46,7 @@ public class UnitychanController : Player {
 
     // HP Display用(テスト実装)
     [SerializeField]
-    private PlayerHPDisplay HPDisplay = null;
+    public PlayerHPDisplay HPDisplay = null;
     
     // Use this for initialization
     void Start () {
@@ -56,6 +56,8 @@ public class UnitychanController : Player {
         controller = GetComponent<CharacterController>();
         anim = GetComponent<Animator>();
         //rb = GetComponent<Rigidbody>();
+        HPDisplay = GameObject.Find("UI/Canvas/PlayerHPBase").GetComponent<PlayerHPDisplay>();
+        dbgText = GameObject.Find("UI/Canvas/playerDbgText").GetComponent<Text>();
     }
 	
 	// Update is called once per frame

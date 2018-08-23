@@ -27,7 +27,7 @@ public class AimRotate : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-        target = GameSystem.PlayerTarget;
+        target = GameSystem.Instance.PlayerTarget;
 
         // ターゲットがいるなら(ロックオン時)
         if (target != null)

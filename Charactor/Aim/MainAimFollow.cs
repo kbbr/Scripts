@@ -7,14 +7,10 @@ public class MainAimFollow : MonoBehaviour {
     GameObject followTargetObj;
     private Vector3 offset;
 
-    void Awake()
-    {
-        // 追従対象を探す: PlayerFollowTargetを探す
-        followTargetObj = GameObject.FindGameObjectWithTag("Player").transform.Find("PlayerFollowTarget").gameObject;
-    }
-
 	// Use this for initialization
 	void Start () {
+        // 追従対象を探す: PlayerFollowTargetを探す
+        followTargetObj = GameSystem.Instance.PlayerObject.transform.Find("PlayerFollowTarget").gameObject;
         // カメラの最初の位置とfollowTargetの位置をoffsetにする
         offset = this.transform.position - followTargetObj.transform.position;
 	}

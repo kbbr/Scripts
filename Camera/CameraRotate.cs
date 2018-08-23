@@ -17,14 +17,14 @@ public class CameraRotate : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-        playerFollowTargetObj = GameObject.FindGameObjectWithTag("Player").transform.Find("PlayerFollowTarget").gameObject;
-        mainAimObj = GameObject.Find("MainAim");
+        playerFollowTargetObj = GameSystem.Instance.PlayerObject.transform.Find("PlayerFollowTarget").gameObject;
+        mainAimObj = GameSystem.Instance.MainAim;
 	}
 	
 	// Update is called once per frame
 	void Update () {
         // ロックオンボタンが押されたとき
-        target = GameSystem.PlayerTarget;
+        target = GameSystem.Instance.PlayerTarget;
 
         // マウスの上下移動を取得
         float mouseY = Input.GetAxis("Mouse Y") * sensitivityX; ;
@@ -49,17 +49,22 @@ public class CameraRotate : MonoBehaviour {
             // X軸だけclampAngleで制限
             newX = Mathf.Clamp(newX, -clampAngle, clampAngle);
         }
+
         /*
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+        // 旧バージョン
         // マウスの左右移動を取得
         float mouseX = Input.GetAxis("Mouse X") * sensitivityY;
         // 上下移動の値を反転させるかどうか
         mouseX *= reverseY ? -1 : 1;
         // 更新後のRotationはマウスでの左右移動を足したものにする
         float newY = nowRot.y + mouseX;
-        */
+        
         // カメラのRotationを更新
         //this.transform.eulerAngles = new Vector3(newX, playerFollowTargetObj.transform.eulerAngles.y, 0);
         //this.transform.eulerAngles = new Vector3(newX, nowRot.y, 0);
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+        */
 
         // カメラのRotationを更新(MainAim -> Playerベクトル方向で)
         //this.transform.rotation = Quaternion.LookRotation(mainAimObj.transform.position - playerFollowTargetObj.transform.position);
