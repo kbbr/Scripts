@@ -5,9 +5,9 @@ using UnityEngine;
 public abstract class Charactor : MonoBehaviour {
 
     /// <summary> Charactorの現在のHP /// </summary>
-    public float CharactorHP { get; set; }
+    public float HP { get; set; }
     /// <summary> CharactorのMAXHP /// </summary>
-    public float CharactorMAXHP { get; set; }
+    public float MAXHP { get; set; }
 
     /// <summary> Charactorの現在のPosition /// </summary>
     public Vector3 CharactorPosition { get; set; }
