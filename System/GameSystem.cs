@@ -22,6 +22,8 @@ public class GameSystem : SingletonMonoBehaviour<GameSystem> {
 
     private Dictionary<string, int> charactorNumber = new Dictionary<string, int>();
 
+    private const string defaultPlayerName = "SDunitychan";
+
     // プレイヤーGameObjectのプレファブ
     public GameObject[] PlayerPrefabs;
     
@@ -40,6 +42,9 @@ public class GameSystem : SingletonMonoBehaviour<GameSystem> {
         // ディクショナリ追加
         charactorNumber.Add("SDunitychan", 0);
         charactorNumber.Add("SDmisakichan", 1);
+
+        // デバッグ用
+        DebugMainScenFirstLoaded();
 
     }
 
@@ -68,7 +73,7 @@ public class GameSystem : SingletonMonoBehaviour<GameSystem> {
                 float closestDistance = Mathf.Infinity;
                 foreach (GameObject closest in PlayerTargets)
                 {
-                    float distance = (closest.transform.position - this.transform.position).sqrMagnitude;
+                    float distance = (closest.transform.position - PlayerObject.transform.position).sqrMagnitude;
                     if (distance < closestDistance)
                     {
                         closestDistance = distance;
@@ -98,9 +103,19 @@ public class GameSystem : SingletonMonoBehaviour<GameSystem> {
         // Playerオブジェクトの生成
         if (GameObject.FindGameObjectWithTag("Player") == null)
         {
+            PlayerName = PlayerName ?? defaultPlayerName;
             GameObject playerInstance = Instantiate(PlayerPrefabs[charactorNumber[PlayerName]], PlayerPrefabs[charactorNumber[PlayerName]].transform.position, PlayerPrefabs[charactorNumber[PlayerName]].transform.rotation);
             playerInstance.transform.parent = GameObject.Find("World").transform;
             PlayerObject = playerInstance;
         }
     }
+    private void DebugMainScenFirstLoaded()
+    {
+        // PlayerNameがセットされてないならMainSceneの読み込み処理
+        if(PlayerName == "")
+        {
+            MainSceneLoaded();
+        }
+    }
+
 }
