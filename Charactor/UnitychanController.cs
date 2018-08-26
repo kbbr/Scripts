@@ -46,7 +46,7 @@ public class UnitychanController : Player {
 
     // HP Display用(テスト実装)
     [SerializeField]
-    public PlayerHPDisplay HPDisplay = null;
+    public HPGaugeDisplay HPDisplay = null;
     
     // Use this for initialization
     void Start () {
@@ -56,7 +56,7 @@ public class UnitychanController : Player {
         controller = GetComponent<CharacterController>();
         anim = GetComponent<Animator>();
         //rb = GetComponent<Rigidbody>();
-        HPDisplay = GameObject.Find("UI/Canvas/PlayerHPBase").GetComponent<PlayerHPDisplay>();
+        HPDisplay = GameObject.Find("UI/Canvas/PlayerHPBase").GetComponent<HPGaugeDisplay>();
         dbgText = GameObject.Find("UI/Canvas/playerDbgText").GetComponent<Text>();
     }
 	
@@ -95,11 +95,16 @@ public class UnitychanController : Player {
         // カメラの前方向(Y軸情報は削る)
         Vector3 cameraForward = new Vector3(Camera.main.transform.forward.x, 0, Camera.main.transform.forward.z);
 
-        Transform cameraDummy = Camera.main.transform;
+        // カメラの回転を保存
+        Vector3 cameraDummyAngles = Camera.main.transform.eulerAngles;
         // カメラのY軸・Z軸回転情報を保存
-        cameraDummy.eulerAngles = new Vector3(0, cameraDummy.eulerAngles.y, cameraDummy.eulerAngles.z);
+        cameraDummyAngles = new Vector3(0f, cameraDummyAngles.y, cameraDummyAngles.y);
+
+        // カメラの回転をQuaternion化
+        Quaternion cameraDummy = Quaternion.Euler(cameraDummyAngles);
+
         // カメラの前方向の計算
-        cameraForward = cameraDummy.rotation * new Vector3(0, 0, 1f);
+        cameraForward = cameraDummy * new Vector3(0, 0, 1f);
 
         // それぞれのXYZ軸に合わせて移動先のベクトル計算
         newSpeedX = moveSpeed.x * cameraRight;
