@@ -40,11 +40,13 @@ public class MainCameraFollow : MonoBehaviour {
 
         // Playerの向き取得
         Vector3 pForward = playerObj.transform.forward;
+
         // カメラの向きはPlayer -> CameraRotateOriginの向き
-        //Vector3 cameraForward = cameraPositionTargetObj.transform.position - playerObj.transform.position;
         Vector3 cameraForward = Camera.main.transform.forward;// - playerObj.transform.position;
+
         // カメラの向きとPlayerの向きの角度差
         float angleVector = Vector3.Angle(pForward, cameraForward);
+
         // PlayerとMainカメラの距離
         float distanceVector = (playerObj.transform.position - this.transform.position).magnitude;
         
@@ -114,7 +116,8 @@ public class MainCameraFollow : MonoBehaviour {
         newX = Mathf.Clamp(newX, -clampAngle, clampAngle);
         this.transform.eulerAngles = new Vector3(newX, nowEulerAngle.y, nowEulerAngle.z);
 
-        dbgText.text += "CamaraRotation  [ " + this.transform.rotation + " ]\n";
+        dbgText.text += "CamaraRotation  [ " + this.transform.eulerAngles + " ]\n";
+        dbgText.text += "eulerAngles [ " + newX + " ] \n";
         dbgText.text += "LookVec [ " + (mainAimObj.transform.position - (playerObj.transform.position + new Vector3(0, 0.8f, 0))) + " ]\n";
 	}
 
